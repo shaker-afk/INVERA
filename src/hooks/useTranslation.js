@@ -58,6 +58,8 @@ const translations = {
     notEco: 'Standard',
     investorCount: 'Interested Investors',
     shareProject: 'Share',
+    currency: 'Currency',
+    investorsWatching: 'Investors Watching',
     // Filters Screen
     filterTitle: 'Refine Results',
     resetFilters: 'Reset',
@@ -110,6 +112,8 @@ const translations = {
     notEco: 'قياسي',
     investorCount: 'المستثمرون المهتمون',
     shareProject: 'مشاركة',
+    currency: 'العملة',
+    investorsWatching: 'مستثمرون يتابعون',
     // Filters Screen
     filterTitle: 'تحسين النتائج',
     resetFilters: 'إعادة ضبط',

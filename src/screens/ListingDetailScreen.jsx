@@ -317,8 +317,8 @@ function FinancialsTab({ listing, t, isRTL }) {
     { label: t('maxInvestment'), value: formatCurrency(listing.capitalMax, listing.currency), icon: 'arrow-up-circle-outline' },
     { label: t('targetCapital'), value: formatCurrency(listing.targetCapitalization, listing.currency), icon: 'flag-outline' },
     { label: t('raised'), value: formatCurrency(listing.raisedAmount, listing.currency), icon: 'wallet-outline' },
-    { label: 'Currency', value: listing.currency, icon: 'cash-outline' },
-    { label: 'Investors Watching', value: listing.trendingCount.toLocaleString(), icon: 'eye-outline' },
+    { label: t('currency'),          value: listing.currency,                                        icon: 'cash-outline' },
+    { label: t('investorsWatching'), value: listing.trendingCount.toLocaleString(),                   icon: 'eye-outline' },
   ];
 
   return (
@@ -407,6 +407,7 @@ export default function ListingDetailScreen() {
 
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
 
   // Animated progress bar value
@@ -415,9 +416,14 @@ export default function ListingDetailScreen() {
   // ── Fetch listing ────────────────────────────────────────────────────────
   useEffect(() => {
     (async () => {
-      const data = await fetchListingById(id);
-      setListing(data);
-      setLoading(false);
+      try {
+        const data = await fetchListingById(id);
+        setListing(data);
+      } catch (e) {
+        setFetchError(e.message ?? 'Failed to load listing.');
+      } finally {
+        setLoading(false);
+      }
     })();
   }, [id]);
 
@@ -452,7 +458,9 @@ export default function ListingDetailScreen() {
   if (!listing) {
     return (
       <SafeAreaView style={styles.loadingContainer}>
-        <Text style={{ color: Colors.onSurface }}>Listing not found.</Text>
+        <Text style={{ color: Colors.onSurface }}>
+          {fetchError ?? 'Listing not found.'}
+        </Text>
         <TouchableOpacity onPress={() => router.back()}>
           <Text style={{ color: Colors.primaryContainer, marginTop: 12 }}>{t('back')}</Text>
         </TouchableOpacity>
@@ -624,10 +632,6 @@ const styles = StyleSheet.create({
   heroTitle: {
     position: 'absolute',
     bottom: Spacing.lg,
-    left: Spacing.md,
-    right: Spacing.md,
-  },
-  heroTitleRTL: {
     left: Spacing.md,
     right: Spacing.md,
   },

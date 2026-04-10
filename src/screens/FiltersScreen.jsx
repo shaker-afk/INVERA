@@ -42,20 +42,8 @@ import { useTranslation } from '../../src/hooks/useTranslation';
 // Theme
 import { Colors, Spacing, Radius, Shadow } from '../../src/constants/theme';
 
-// Sector colours (same palette as SectorBadge)
-const SECTOR_META = {
-  Energy:      { icon: 'flash-outline',     color: '#664d00', bg: '#fff3cd' },
-  Tourism:     { icon: 'airplane-outline',  color: '#155724', bg: '#d4edda' },
-  Technology:  { icon: 'hardware-chip-outline', color: '#004085', bg: '#cce5ff' },
-  Agriculture: { icon: 'leaf-outline',     color: '#0c5460', bg: '#d1ecf1' },
-};
-
-const SECTORS_AR = {
-  Energy: 'طاقة',
-  Tourism: 'سياحة',
-  Technology: 'تكنولوجيا',
-  Agriculture: 'زراعة',
-};
+// Shared sector metadata (icon, colours, bilingual labels)
+import { SECTOR_META, getSectorLabel } from '../../src/constants/sectors';
 
 // ---------------------------------------------------------------------------
 // Sub-components
@@ -80,7 +68,7 @@ const labelStyles = StyleSheet.create({
 
 function SectorChip({ sector, active, lang, onToggle }) {
   const meta = SECTOR_META[sector];
-  const label = lang === 'ar' ? SECTORS_AR[sector] : sector;
+  const label = getSectorLabel(sector, lang);
 
   return (
     <TouchableOpacity
@@ -218,9 +206,7 @@ function ActiveFiltersSummary({ sectors, capitalBucket, ecoOnly, lang, t }) {
   const pills = [];
 
   if (sectors.length > 0) {
-    const labels = lang === 'ar'
-      ? sectors.map((s) => SECTORS_AR[s])
-      : sectors;
+    const labels = sectors.map((s) => getSectorLabel(s, lang));
     pills.push(labels.join(', '));
   }
 
@@ -294,10 +280,8 @@ export default function FiltersScreen() {
     );
   }, []);
 
-  // ── Capital bucket select ────────────────────────────────────────────────
-  const selectCapital = useCallback((bucket) => {
-    setDraftCapital(bucket);
-  }, []);
+  // ── Capital bucket select — passed directly (no wrapper needed) ──────────
+  // selectCapital is just setDraftCapital; no useCallback required here
 
   // ── Count active draft filters ───────────────────────────────────────────
   const activeCount =
@@ -403,15 +387,14 @@ export default function FiltersScreen() {
         <View style={styles.section}>
           <SectionLabel label={t('capitalFilter')} isRTL={isRTL} />
           {CAPITAL_BUCKETS.map((bucket) => {
-            const isActive =
-              draftCapital.label === bucket.label;
+            const isActive = draftCapital.label === bucket.label;
             return (
               <CapitalBucketRow
                 key={bucket.label}
                 bucket={bucket}
                 active={isActive}
                 lang={lang}
-                onSelect={selectCapital}
+                onSelect={setDraftCapital}
               />
             );
           })}

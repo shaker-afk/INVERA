@@ -13,7 +13,7 @@
  * Bilingual: All user-facing strings come through the `t()` function.
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   View,
   FlatList,
@@ -24,13 +24,10 @@ import {
   StatusBar,
   RefreshControl,
   Dimensions,
-  Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-
-const SCREEN_WIDTH = Dimensions.get('window').width;
 
 // Services
 import { fetchListings } from '../../src/services/firebase/listingService';
@@ -48,6 +45,9 @@ import InvestmentCard from '../../src/components/molecules/InvestmentCard';
 
 // Theme
 import { Colors, Spacing } from '../../src/constants/theme';
+import { SECTOR_KEYS, getSectorLabel } from '../../src/constants/sectors';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 // ---------------------------------------------------------------------------
 // Section Header sub-component
@@ -89,36 +89,36 @@ const sectionStyles = StyleSheet.create({
 // ---------------------------------------------------------------------------
 // Sector Filter Chips
 // ---------------------------------------------------------------------------
-const SECTORS = ['All', 'Energy', 'Tourism', 'Technology', 'Agriculture'];
-const SECTORS_AR = ['الكل', 'طاقة', 'سياحة', 'تكنولوجيا', 'زراعة'];
+const ALL_CHIP_SECTORS = ['All', ...SECTOR_KEYS]; // 'All' chip + real sectors
 
 function SectorChips({ activeSector, onSelect, isRTL, lang }) {
-  const labels = lang === 'ar' ? SECTORS_AR : SECTORS;
-  const values = SECTORS; // always use English keys for filtering
-
   return (
     <View style={chipStyles.wrapper}>
       <FlatList
         horizontal
-        data={labels}
-        keyExtractor={(_, i) => values[i]}
+        data={ALL_CHIP_SECTORS}
+        keyExtractor={(key) => key}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={[
           chipStyles.list,
           isRTL && chipStyles.listRTL,
         ]}
         inverted={isRTL}
-        renderItem={({ item, index }) => {
-          const isActive = activeSector === values[index];
+        renderItem={({ item: key }) => {
+          const isActive = activeSector === key;
+          // 'All' has a special label; real sectors use SECTOR_META
+          const label = key === 'All'
+            ? (lang === 'ar' ? 'الكل' : 'All')
+            : getSectorLabel(key, lang);
           return (
             <TouchableOpacity
               style={[chipStyles.chip, isActive && chipStyles.chipActive]}
-              onPress={() => onSelect(values[index])}
+              onPress={() => onSelect(key)}
               accessibilityRole="button"
               accessibilityState={{ selected: isActive }}
             >
               <Text style={[chipStyles.label, isActive && chipStyles.labelActive]}>
-                {item}
+                {label}
               </Text>
             </TouchableOpacity>
           );
@@ -151,6 +151,74 @@ const chipStyles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+// ---------------------------------------------------------------------------
+// FeaturedSlider — auto-advancing hero carousel
+// ---------------------------------------------------------------------------
+function FeaturedSlider({ listings, isRTL, lang, featuredLabel, investLabel, onPress }) {
+  const [slideIndex, setSlideIndex] = useState(0);
+  const sliderRef = useRef(null);
+  const isUserScrolling = useRef(false);
+
+  // Auto-advance every 4 s; pause while the user is dragging
+  useEffect(() => {
+    if (listings.length <= 1) return;
+    const interval = setInterval(() => {
+      if (isUserScrolling.current) return;
+      setSlideIndex((prev) => {
+        const next = (prev + 1) % listings.length;
+        sliderRef.current?.scrollToOffset({ offset: next * SCREEN_WIDTH, animated: true });
+        return next;
+      });
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [listings.length]);
+
+  if (listings.length === 0) return null;
+
+  return (
+    <View style={styles.section}>
+      <SectionHeader title={featuredLabel} />
+
+      <FlatList
+        ref={sliderRef}
+        data={listings}
+        keyExtractor={(item) => item.id}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={SCREEN_WIDTH}
+        decelerationRate="fast"
+        scrollEventThrottle={16}
+        onScrollBeginDrag={() => { isUserScrolling.current = true; }}
+        onMomentumScrollEnd={(e) => {
+          isUserScrolling.current = false;
+          const idx = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
+          setSlideIndex(idx);
+        }}
+        renderItem={({ item }) => (
+          <View style={styles.sliderPage}>
+            <FeaturedCard
+              listing={item}
+              isRTL={isRTL}
+              lang={lang}
+              featuredLabel={featuredLabel}
+              investLabel={investLabel}
+              onPress={onPress}
+            />
+          </View>
+        )}
+      />
+
+      {/* Pagination dots */}
+      <View style={styles.dotsRow}>
+        {listings.map((_, i) => (
+          <View key={i} style={[styles.dot, i === slideIndex && styles.dotActive]} />
+        ))}
+      </View>
+    </View>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Main Screen
@@ -245,13 +313,14 @@ export default function DiscoveryDashboard() {
     resetFilters();
   }, [resetFilters]);
 
-  // ── Derived data ─────────────────────────────────────────────────────────
-  // Top 3 by trending are always shown in the featured slider (unaffected by chips)
-  const featuredListings = [...listings]
-    .sort((a, b) => b.trendingCount - a.trendingCount)
-    .slice(0, 3);
-  // The feed shows ALL filtered results — no slicing
-  const feedListings = filteredListings;
+  // Top 3 by trending always shown in the featured slider (unaffected by chips)
+  const featuredListings = useMemo(
+    () =>
+      [...listings]
+        .sort((a, b) => b.trendingCount - a.trendingCount)
+        .slice(0, 3),
+    [listings]
+  );
 
   // ── Render list item ─────────────────────────────────────────────────────
   const renderCard = useCallback(
@@ -268,85 +337,18 @@ export default function DiscoveryDashboard() {
     [isRTL, lang, t, handleCardPress]
   );
 
-  // ── Featured slider ─────────────────────────────────────────────────────────
-  const [slideIndex, setSlideIndex] = useState(0);
-  const sliderRef = useRef(null);
-  const isUserScrolling = useRef(false);
-
-  // Auto-advance every 4 seconds; pause while the user is dragging
-  useEffect(() => {
-    if (featuredListings.length <= 1) return;
-    const interval = setInterval(() => {
-      if (isUserScrolling.current) return;
-      setSlideIndex((prev) => {
-        const next = (prev + 1) % featuredListings.length;
-        sliderRef.current?.scrollToOffset({
-          offset: next * SCREEN_WIDTH,
-          animated: true,
-        });
-        return next;
-      });
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [featuredListings.length]);
-
-  const FeaturedSlider = featuredListings.length > 0 ? (
-    <View style={styles.section}>
-      <SectionHeader
-        title={t('featuredProject')}
-      />
-
-      {/* Horizontal paged scroll */}
-      <FlatList
-        ref={sliderRef}
-        data={featuredListings}
-        keyExtractor={(item) => item.id}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={SCREEN_WIDTH}
-        decelerationRate="fast"
-        scrollEventThrottle={16}
-        onScrollBeginDrag={() => { isUserScrolling.current = true; }}
-        onMomentumScrollEnd={(e) => {
-          isUserScrolling.current = false;
-          const idx = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
-          setSlideIndex(idx);
-        }}
-        renderItem={({ item }) => (
-          <View style={{ width: SCREEN_WIDTH }}>
-            <FeaturedCard
-              listing={item}
-              isRTL={isRTL}
-              lang={lang}
-              featuredLabel={t('featuredProject')}
-              investLabel={t('invest')}
-              onPress={handleCardPress}
-            />
-          </View>
-        )}
-      />
-
-      {/* Pagination dots */}
-      <View style={styles.dotsRow}>
-        {featuredListings.map((_, i) => (
-          <View
-            key={i}
-            style={[
-              styles.dot,
-              i === slideIndex && styles.dotActive,
-            ]}
-          />
-        ))}
-      </View>
-    </View>
-  ) : null;
-
-  // ── List header ──────────────────────────────────────────────────────────
-  const ListHeader = (
+  // ── List header (memoized — prevents FlatList header remount) ────────────
+  const ListHeader = useMemo(() => (
     <>
       {/* Featured Hero Slider */}
-      {FeaturedSlider}
+      <FeaturedSlider
+        listings={featuredListings}
+        isRTL={isRTL}
+        lang={lang}
+        featuredLabel={t('featuredProject')}
+        investLabel={t('invest')}
+        onPress={handleCardPress}
+      />
 
       {/* Sector chip filters */}
       <View style={styles.section}>
@@ -366,10 +368,10 @@ export default function DiscoveryDashboard() {
         onAction={handleViewAll}
       />
     </>
-  );
+  ), [featuredListings, activeSector, isRTL, lang, t, handleCardPress, handleViewAll]);
 
-  // ── Empty / error states ─────────────────────────────────────────────────
-  const ListEmpty = (
+  // ── Empty / error state (memoized) ───────────────────────────────────────
+  const ListEmpty = useMemo(() => (
     <View style={styles.emptyState}>
       {error ? (
         <>
@@ -382,7 +384,7 @@ export default function DiscoveryDashboard() {
         <Text style={styles.emptyText}>{t('noListings')}</Text>
       )}
     </View>
-  );
+  ), [error, t, loadListings]);
 
   // ── Loading state ────────────────────────────────────────────────────────
   if (loading) {
@@ -414,7 +416,7 @@ export default function DiscoveryDashboard() {
       <StatusBar barStyle="light-content" backgroundColor={Colors.primaryContainer} />
 
       <FlatList
-        data={feedListings}
+        data={filteredListings}
         keyExtractor={(item) => item.id}
         renderItem={renderCard}
         ListHeaderComponent={
@@ -472,6 +474,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  sliderPage: { width: SCREEN_WIDTH },
   listContent: {
     paddingBottom: 32,
   },
