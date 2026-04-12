@@ -7,19 +7,19 @@
  *   - Filter button
  */
 
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
-import LanguageToggle from '../atoms/LanguageToggle';
-import { Colors, Spacing, Radius } from '../../constants/theme';
+import LanguageToggle from "../atoms/LanguageToggle";
+import { Colors, Spacing, Radius } from "../../constants/theme";
 
 /**
  * @param {object}   props
@@ -32,7 +32,8 @@ import { Colors, Spacing, Radius } from '../../constants/theme';
  * @param {string}   props.filterLabel
  * @param {Function} props.onFilterPress
  * @param {boolean}  [props.hasActiveFilters] — shows an accent dot when true
- * @param {string}   props.tagline
+ * @param {string}   props.taglinePart1 — first line (white)
+ * @param {string}   props.taglinePart2 — second line (gold)
  */
 export default function DashboardHeader({
   searchQuery,
@@ -44,7 +45,8 @@ export default function DashboardHeader({
   filterLabel,
   onFilterPress,
   hasActiveFilters = false,
-  tagline,
+  taglinePart1,
+  taglinePart2,
 }) {
   return (
     <LinearGradient
@@ -53,17 +55,43 @@ export default function DashboardHeader({
       end={{ x: 1, y: 1 }}
       style={styles.gradient}
     >
+      {/* Gold corner sweep — top-left anchor */}
+      <LinearGradient
+        colors={[
+          "rgba(201,168,76,0.28)",
+          "rgba(201,168,76,0.08)",
+          "transparent",
+        ]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0.65, y: 0.65 }}
+        style={styles.goldShimmer}
+        pointerEvents="none"
+      />
       {/* Top row: profile icon + language toggle */}
       <View style={[styles.topRow, isRTL && styles.rowRTL]}>
         <LanguageToggle lang={lang} onToggle={onToggleLanguage} />
 
-        <TouchableOpacity style={styles.profileButton} accessibilityRole="button">
-          <Ionicons name="person-circle-outline" size={32} color={Colors.onPrimary} />
+        <TouchableOpacity
+          style={styles.profileButton}
+          accessibilityRole="button"
+        >
+          <Ionicons
+            name="person-circle-outline"
+            size={32}
+            color={Colors.onPrimary}
+          />
         </TouchableOpacity>
       </View>
 
-      {/* Tagline */}
-      <Text style={[styles.tagline, isRTL && styles.textRTL]}>{tagline}</Text>
+      {/* Two-tone title block */}
+      <View style={[styles.titleBlock, isRTL && styles.titleBlockRTL]}>
+        <Text style={[styles.taglineLine1, isRTL && styles.textRTL]}>
+          {taglinePart1}
+        </Text>
+        <Text style={[styles.taglineLine2, isRTL && styles.textRTL]}>
+          {taglinePart2}
+        </Text>
+      </View>
 
       {/* Search + Filter row */}
       <View style={[styles.searchRow, isRTL && styles.rowRTL]}>
@@ -80,7 +108,7 @@ export default function DashboardHeader({
             placeholderTextColor={Colors.onSurfaceVariant}
             value={searchQuery}
             onChangeText={onSearchChange}
-            textAlign={isRTL ? 'right' : 'left'}
+            textAlign={isRTL ? "right" : "left"}
             returnKeyType="search"
             accessibilityLabel={searchPlaceholder}
           />
@@ -107,41 +135,69 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingBottom: Spacing.lg,
     gap: Spacing.md,
+    overflow: "hidden",
+  },
+  goldShimmer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  goldDivider: {
+    height: 1,
+    marginHorizontal: -Spacing.md,
+    backgroundColor: "rgba(201,168,76,0.35)",
   },
 
   topRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   rowRTL: {
-    flexDirection: 'row-reverse',
+    flexDirection: "row-reverse",
   },
 
   profileButton: {
     padding: 2,
   },
 
-  tagline: {
+  titleBlock: {
+    gap: 0,
+  },
+  titleBlockRTL: {
+    alignItems: "flex-end",
+  },
+  taglineLine1: {
+    fontFamily: "PlayfairDisplay-Bold",
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.onPrimary,
-    letterSpacing: -0.5,
+    letterSpacing: 0.1,
     lineHeight: 28,
   },
+  taglineLine2: {
+    fontFamily: "PlayfairDisplay-Bold",
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#C9A84C",
+    letterSpacing: 0.1,
+    lineHeight: 32,
+  },
   textRTL: {
-    textAlign: 'right',
+    textAlign: "right",
   },
 
   searchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: Spacing.sm,
   },
   searchBox: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: Colors.surfaceContainerLowest,
     borderRadius: Radius.xl,
     paddingHorizontal: Spacing.md,
@@ -159,19 +215,19 @@ const styles = StyleSheet.create({
   },
 
   filterButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: Spacing.xs,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: "rgba(201,168,76,0.12)",
     borderRadius: Radius.xl,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm + 2,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.25)',
+    borderColor: "rgba(201,168,76,0.55)",
   },
   filterLabel: {
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.onPrimary,
   },
   filterDot: {

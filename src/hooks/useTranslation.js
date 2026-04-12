@@ -40,6 +40,8 @@ const translations = {
     // Greeting
     greeting: 'Good morning',
     tagline: 'Invest in the Future of Jordan',
+    taglinePart1: 'Invest in the',
+    taglinePart2: 'Future of Jordan',
     // Detail Screen
     back: 'Back',
     overview: 'Overview',
@@ -94,6 +96,8 @@ const translations = {
     // Greeting
     greeting: 'صباح الخير',
     tagline: 'استثمر في مستقبل الأردن',
+    taglinePart1: 'استثمر في',
+    taglinePart2: 'مستقبل الأردن',
     // Detail Screen
     back: 'رجوع',
     overview: 'نظرة عامة',

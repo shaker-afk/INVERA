@@ -1,7 +1,7 @@
 /**
  * app/(tabs)/_layout.tsx
  *
- * Configures the bottom tab navigator with the custom InvestJO tab bar.
+ * Configures the bottom tab navigator with the custom Invera tab bar.
  * Screens: Discovery (index) · Map · Manage · Profile
  */
 import React, { useCallback } from 'react';

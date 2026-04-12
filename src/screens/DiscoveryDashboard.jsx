@@ -1,7 +1,7 @@
 /**
  * DiscoveryDashboard.jsx — Screen / Template
  *
- * Discovery Dashboard (Screen 1) for the InvestJO platform.
+ * Discovery Dashboard (Screen 1) for the Invera platform.
  *
  * Architecture:
  *  - Data layer: src/services/firebase/listingService.js (Firebase-ready)
@@ -401,7 +401,8 @@ export default function DiscoveryDashboard() {
           filterLabel={t('filter')}
           onFilterPress={handleFilterPress}
           hasActiveFilters={hasActiveFilters}
-          tagline={t('tagline')}
+          taglinePart1={t('taglinePart1')}
+          taglinePart2={t('taglinePart2')}
         />
         <View style={styles.loadingBody}>
           <ActivityIndicator size="large" color={Colors.primaryContainer} />
@@ -431,7 +432,8 @@ export default function DiscoveryDashboard() {
               filterLabel={t('filter')}
               onFilterPress={handleFilterPress}
               hasActiveFilters={hasActiveFilters}
-              tagline={t('tagline')}
+              taglinePart1={t('taglinePart1')}
+              taglinePart2={t('taglinePart2')}
             />
             <View style={styles.feedContainer}>
               {ListHeader}

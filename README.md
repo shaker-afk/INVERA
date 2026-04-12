@@ -1,4 +1,4 @@
-# INVESTJO 📈
+# INVERA 📈
 
 A mobile investment platform for Jordan, built with [React Native](https://reactnative.dev/) and [Expo](https://expo.dev/).
 
@@ -23,8 +23,8 @@ Before running the app, make sure you have the following installed:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/shaker-afk/INVESTJO.git
-cd INVESTJO
+git clone https://github.com/shaker-afk/INVERA.git
+cd INVERA
 ```
 
 ### 2. Install dependencies
@@ -107,7 +107,7 @@ npx expo start --web
 ## Project Structure
 
 ```
-INVESTJO/
+INVERA/
 ├── app/              # File-based routing (Expo Router)
 ├── src/
 │   ├── components/   # Reusable UI components (atoms, molecules, etc.)

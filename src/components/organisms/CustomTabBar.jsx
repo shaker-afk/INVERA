@@ -1,7 +1,7 @@
 /**
  * CustomTabBar.jsx — Organism
  *
- * A premium custom bottom navigation bar for InvestJO.
+ * A premium custom bottom navigation bar for Invera.
  *
  * Design language (from the screenshot):
  *  - White background with a soft top shadow
