@@ -9,10 +9,11 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   Modal,
-  Dimensions
+  Dimensions,
+  Keyboard
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Markdown from 'react-native-markdown-display';
 import { fetchRegulatoryData, ChatMessage, RegulatoryData } from '../services/firebaseService';
@@ -27,6 +28,23 @@ export default function AIRegulatoryAssistant() {
   const [isTyping, setIsTyping] = useState(false);
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    if (Platform.OS !== 'ios') return;
+
+    const showSub = Keyboard.addListener('keyboardWillShow', (e) => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+    const hideSub = Keyboard.addListener('keyboardWillHide', () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   useEffect(() => {
     if (isOpen && !data) {
@@ -98,11 +116,8 @@ export default function AIRegulatoryAssistant() {
         presentationStyle="pageSheet"
         onRequestClose={() => setIsOpen(false)}
       >
-        <SafeAreaView style={styles.safeArea}>
-          <KeyboardAvoidingView 
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
-          >
+        <View style={[styles.container, { paddingBottom: keyboardHeight }]}>
+          <SafeAreaView style={styles.safeArea}>
             <View style={styles.header}>
               <View style={styles.headerTextWrap}>
                 <Text style={styles.title}>AI Assistant</Text>
@@ -210,8 +225,8 @@ export default function AIRegulatoryAssistant() {
                 </View>
               </>
             )}
-          </KeyboardAvoidingView>
-        </SafeAreaView>
+          </SafeAreaView>
+        </View>
       </Modal>
     </>
   );
