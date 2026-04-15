@@ -72,6 +72,19 @@ const translations = {
     ecoFilterDesc: 'Show only environmentally certified projects',
     activeFilters: 'Active Filters',
     noActiveFilters: 'No filters applied',
+    // Investment Map Screen
+    mapTitle: 'Investment Map',
+    mapSubtitle: 'Jordan Opportunity Zones',
+    mapSectorLegend: 'Sector Legend',
+    mapAllZones: 'All',
+    mapTopYield: 'Est. Yield',
+    mapTotalCapital: 'Fund Size',
+    mapListings: 'Projects',
+    mapExploreZone: 'View Listings',
+    mapFeaturedZone: 'Featured Zone',
+    mapNoZones: 'No zones found for this sector.',
+    mapRegionsLabel: 'Investment Regions',
+    mapEsg: 'ESG',
   },
   ar: {
     // Header
@@ -128,6 +141,19 @@ const translations = {
     ecoFilterDesc: 'عرض المشاريع المعتمدة بيئياً فقط',
     activeFilters: 'الفلاتر النشطة',
     noActiveFilters: 'لا توجد فلاتر مطبقة',
+    // Investment Map Screen
+    mapTitle: 'خريطة الاستثمار',
+    mapSubtitle: 'مناطق الفرص في الأردن',
+    mapSectorLegend: 'دليل القطاعات',
+    mapAllZones: 'الكل',
+    mapTopYield: 'العائد المتوقع',
+    mapTotalCapital: 'رأس المال الكلي',
+    mapListings: 'مشاريع',
+    mapExploreZone: 'عرض المشاريع',
+    mapFeaturedZone: 'المنطقة المميزة',
+    mapNoZones: 'لا توجد مناطق لهذا القطاع.',
+    mapRegionsLabel: 'مناطق الاستثمار',
+    mapEsg: 'ESG',
   },
 };
 
