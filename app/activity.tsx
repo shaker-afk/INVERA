@@ -23,7 +23,7 @@ export default function ActivityModal() {
   const { t, isRTL } = useTranslation();
 
   const ACTIVITIES = [
-    { id: '1', type: 'alert', title: t('newMatchAlert'), time: t('timeAgo2M'), desc: 'A new Sustainable Energy Sukuk project in Aqaba aligns with your risk profile and sector interests.', action: t('details').toUpperCase() },
+    { id: '1', type: 'alert', title: t('newMatchAlert'), time: t('timeAgo2M'), desc: 'A new Sustainable Energy Sukuk project in Aqaba aligns with your risk profile and sector interests.', action: String(t('details')).toUpperCase() },
     { id: '2', type: 'message', title: t('messageFrom'), time: t('timeAgo1H'), desc: '"Regarding the Series B proposal, we have updated the term sheet with the requested amendments..."' },
     { id: '3', type: 'document', title: t('documentStatusUpdate'), time: t('timeAgo4H'), desc: "Your KYC Verification for the 'Desert Pearl' development has been Approved.", attachment: 'verification_seal_v2.pdf' },
     { id: '4', type: 'login', title: t('loginDetected'), time: t('yesterday'), desc: 'A successful login was recorded from a new Safari browser in Amman, Jordan.' },

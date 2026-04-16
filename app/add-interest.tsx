@@ -21,16 +21,16 @@ export default function AddInterestModal() {
   const router = useRouter();
   const { t, isRTL } = useTranslation();
   
-  const ALL_INTERESTS = [
-    { id: '1', name: t('greenEnergy'), icon: 'leaf-outline', selected: true },
-    { id: '2', name: t('realEstate'), icon: 'business-outline', selected: true },
-    { id: '3', name: t('medTech'), icon: 'shield-checkmark-outline', selected: true },
-    { id: '4', name: t('finTech'), icon: 'card-outline', selected: true },
-    { id: '5', name: t('agriTech'), icon: 'flower-outline', selected: true },
-    { id: '6', name: t('artificialIntelligence'), icon: 'hardware-chip-outline', selected: false },
-    { id: '7', name: t('logistics'), icon: 'boat-outline', selected: false },
-    { id: '8', name: t('edTech'), icon: 'book-outline', selected: false },
-    { id: '9', name: t('cybersecurity'), icon: 'lock-closed-outline', selected: false },
+  const ALL_INTERESTS: Array<{ id: string, name: string, icon: string, selected: boolean }> = [
+    { id: '1', name: String(t('greenEnergy')), icon: 'leaf-outline', selected: true },
+    { id: '2', name: String(t('realEstate')), icon: 'business-outline', selected: true },
+    { id: '3', name: String(t('medTech')), icon: 'shield-checkmark-outline', selected: true },
+    { id: '4', name: String(t('finTech')), icon: 'card-outline', selected: true },
+    { id: '5', name: String(t('agriTech')), icon: 'flower-outline', selected: true },
+    { id: '6', name: String(t('artificialIntelligence')), icon: 'hardware-chip-outline', selected: false },
+    { id: '7', name: String(t('logistics')), icon: 'boat-outline', selected: false },
+    { id: '8', name: String(t('edTech')), icon: 'book-outline', selected: false },
+    { id: '9', name: String(t('cybersecurity')), icon: 'lock-closed-outline', selected: false },
   ];
 
   const [search, setSearch] = useState('');

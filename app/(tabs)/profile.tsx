@@ -92,7 +92,7 @@ export default function ProfileScreen() {
           <View style={[styles.sectorsHeader, isRTL && { flexDirection: 'row-reverse' }]}>
             <Text style={styles.sectorsTitle}>{t('sectorInterests')}</Text>
             <TouchableOpacity>
-              <Text style={styles.sectorsEdit}>{t('edit').toUpperCase()}</Text>
+              <Text style={styles.sectorsEdit}>{String(t('edit')).toUpperCase()}</Text>
             </TouchableOpacity>
           </View>
           <View style={[styles.chipsRow, isRTL && { flexDirection: 'row-reverse' }]}>
@@ -164,7 +164,7 @@ export default function ProfileScreen() {
                 A new Sustainable Energy Sukuk project in Aqaba aligns with your risk profile and sector interests.
               </Text>
               <TouchableOpacity style={[styles.viewDetailsBtn, isRTL && { alignSelf: 'flex-end' }]}>
-                <Text style={styles.viewDetailsText}>{t('details').toUpperCase()}</Text>
+                <Text style={styles.viewDetailsText}>{String(t('details')).toUpperCase()}</Text>
               </TouchableOpacity>
             </View>
           </View>
