@@ -63,10 +63,10 @@ export default function CreateListingModal() {
 
         <View style={styles.inputGroup}>
           <Text style={[styles.label, isRTL && { textAlign: 'right' }]}>{t('assetType')}</Text>
-          <TouchableOpacity style={[styles.selector, isRTL && { flexDirection: 'row-reverse' }]}>
+          <View style={[styles.selector, isRTL && { flexDirection: 'row-reverse' }]}>
             <Text style={styles.selectorText}>{t('selectCategory')}</Text>
             <Feather name="chevron-down" size={20} color={Colors.textMuted} />
-          </TouchableOpacity>
+          </View>
         </View>
 
         <TouchableOpacity 

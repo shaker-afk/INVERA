@@ -14,7 +14,10 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Dimensions,
 } from "react-native";
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -49,93 +52,95 @@ export default function DashboardHeader({
   taglinePart2,
 }) {
   return (
-    <LinearGradient
-      colors={[Colors.primaryContainer, Colors.primary]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.gradient}
-    >
-      {/* Gold corner sweep — top-left anchor */}
+    <View style={styles.wrapper}>
       <LinearGradient
-        colors={[
-          "rgba(201,168,76,0.28)",
-          "rgba(201,168,76,0.08)",
-          "transparent",
-        ]}
+        colors={[Colors.primaryContainer, Colors.primary]}
         start={{ x: 0, y: 0 }}
-        end={{ x: 0.65, y: 0.65 }}
-        style={styles.goldShimmer}
-        pointerEvents="none"
-      />
-      {/* Top row: profile icon + language toggle */}
-      <View style={[styles.topRow, isRTL && styles.rowRTL]}>
-        <LanguageToggle lang={lang} onToggle={onToggleLanguage} />
+        end={{ x: 1, y: 1 }}
+        style={styles.gradient}
+      >
+        {/* Gold corner sweep — top-left anchor */}
+        <LinearGradient
+          colors={[
+            "rgba(201,168,76,0.28)",
+            "rgba(201,168,76,0.08)",
+            "transparent",
+          ]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0.65, y: 0.65 }}
+          style={styles.goldShimmer}
+          pointerEvents="none"
+        />
 
-        <TouchableOpacity
-          style={styles.profileButton}
-          accessibilityRole="button"
-        >
-          <Ionicons
-            name="person-circle-outline"
-            size={32}
-            color={Colors.onPrimary}
-          />
-        </TouchableOpacity>
-      </View>
-
-      {/* Two-tone title block */}
-      <View style={[styles.titleBlock, isRTL && styles.titleBlockRTL]}>
-        <Text style={[styles.taglineLine1, isRTL && styles.textRTL]}>
-          {taglinePart1}
-        </Text>
-        <Text style={[styles.taglineLine2, isRTL && styles.textRTL]}>
-          {taglinePart2}
-        </Text>
-      </View>
-
-      {/* Search + Filter row */}
-      <View style={[styles.searchRow, isRTL && styles.rowRTL]}>
-        <View style={[styles.searchBox, isRTL && styles.rowRTL]}>
-          <Ionicons
-            name="search-outline"
-            size={18}
-            color={Colors.onSurfaceVariant}
-            style={styles.searchIcon}
-          />
-          <TextInput
-            style={[styles.searchInput, isRTL && styles.textRTL]}
-            placeholder={searchPlaceholder}
-            placeholderTextColor={Colors.onSurfaceVariant}
-            value={searchQuery}
-            onChangeText={onSearchChange}
-            textAlign={isRTL ? "right" : "left"}
-            returnKeyType="search"
-            accessibilityLabel={searchPlaceholder}
-          />
+        {/* Top row: language toggle aligned to the trailing edge */}
+        <View style={[styles.topRow, isRTL && styles.topRowRTL]}>
+          <View />
+          <LanguageToggle lang={lang} onToggle={onToggleLanguage} />
         </View>
 
-        <TouchableOpacity
-          style={styles.filterButton}
-          onPress={onFilterPress}
-          accessibilityRole="button"
-          accessibilityLabel={filterLabel}
-        >
-          <Ionicons name="options-outline" size={16} color={Colors.onPrimary} />
-          <Text style={styles.filterLabel}>{filterLabel}</Text>
-          {hasActiveFilters && <View style={styles.filterDot} />}
-        </TouchableOpacity>
+        {/* Two-tone title block */}
+        <View style={[styles.titleBlock, isRTL && styles.titleBlockRTL]}>
+          <Text style={[styles.taglineLine1, isRTL && styles.textRTL]}>
+            {taglinePart1}
+          </Text>
+          <Text style={[styles.taglineLine2, isRTL && styles.textRTL]}>
+            {taglinePart2}
+          </Text>
+        </View>
+
+        {/* Search + Filter row */}
+        <View style={[styles.searchRow, isRTL && styles.rowRTL]}>
+          <View style={[styles.searchBox, isRTL && styles.rowRTL]}>
+            <Ionicons
+              name="search-outline"
+              size={18}
+              color={Colors.onSurfaceVariant}
+              style={styles.searchIcon}
+            />
+            <TextInput
+              style={[styles.searchInput, isRTL && styles.textRTL]}
+              placeholder={searchPlaceholder}
+              placeholderTextColor={Colors.onSurfaceVariant}
+              value={searchQuery}
+              onChangeText={onSearchChange}
+              textAlign={isRTL ? "right" : "left"}
+              returnKeyType="search"
+              accessibilityLabel={searchPlaceholder}
+            />
+          </View>
+
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={onFilterPress}
+            accessibilityRole="button"
+            accessibilityLabel={filterLabel}
+          >
+            <Ionicons name="options-outline" size={16} color={Colors.onPrimary} />
+            <Text style={styles.filterLabel}>{filterLabel}</Text>
+            {hasActiveFilters && <View style={styles.filterDot} />}
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+      
+      {/* Decorative Swoop / Wave */}
+      <View style={styles.swoopContainer}>
+        <View style={styles.swoop} />
       </View>
-    </LinearGradient>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: Colors.surface,
+  },
   gradient: {
-    paddingTop: 52,
+    paddingTop: 12,
     paddingHorizontal: Spacing.md,
-    paddingBottom: Spacing.lg,
+    paddingBottom: Spacing.lg + 10,
     gap: Spacing.md,
-    overflow: "hidden",
+    overflow: "visible",
+    zIndex: 1,
   },
   goldShimmer: {
     position: "absolute",
@@ -144,26 +149,42 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  goldDivider: {
-    height: 1,
-    marginHorizontal: -Spacing.md,
-    backgroundColor: "rgba(201,168,76,0.35)",
+  swoopContainer: {
+    position: "absolute",
+    bottom: -30,
+    left: 0,
+    right: 0,
+    height: 80,
+    backgroundColor: "transparent",
+    overflow: "hidden",
   },
-
+  swoop: {
+    position: "absolute",
+    top: -40,
+    left: -SCREEN_WIDTH * 0.25,
+    width: SCREEN_WIDTH * 1.5,
+    height: 100,
+    backgroundColor: Colors.primary,
+    borderBottomLeftRadius: 1000,
+    borderBottomRightRadius: 1000,
+  },
   topRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginTop: 8,
   },
+  topRowRTL: {
+    flexDirection: "row-reverse",
+  },
+
+
   rowRTL: {
     flexDirection: "row-reverse",
   },
 
-  profileButton: {
-    padding: 2,
-  },
-
   titleBlock: {
+    marginTop: 4,
     gap: 0,
   },
   titleBlockRTL: {
@@ -193,6 +214,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.sm,
+    marginBottom: 4,
   },
   searchBox: {
     flex: 1,

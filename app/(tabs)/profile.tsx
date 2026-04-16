@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from '../../src/hooks/useTranslation';
+import CommonHeader from '../../src/components/organisms/CommonHeader';
 
 const LocalColors = {
   background: '#FAFAFC', 
@@ -32,21 +33,7 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={[styles.headerRow, isRTL && { flexDirection: 'row-reverse' }]}>
-          <View style={[styles.headerLeft, isRTL && { flexDirection: 'row-reverse' }]}>
-            <Ionicons name="star" size={16} color={LocalColors.navy} style={{marginTop: -2}} />
-            <Text style={styles.headerBrand}>Sovereign Ledger</Text>
-          </View>
-          <View style={[styles.headerRight, isRTL && { flexDirection: 'row-reverse' }]}>
-            <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-              <Feather name="search" size={18} color={LocalColors.textMuted} />
-            </TouchableOpacity>
-            <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-              <Feather name="bell" size={18} color={LocalColors.navy} />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <CommonHeader style={{marginBottom: 0}}/>
 
         {/* Profile Card */}
         <View style={styles.profileCard}>
@@ -91,9 +78,6 @@ export default function ProfileScreen() {
         <View style={styles.sectorsContainer}>
           <View style={[styles.sectorsHeader, isRTL && { flexDirection: 'row-reverse' }]}>
             <Text style={styles.sectorsTitle}>{t('sectorInterests')}</Text>
-            <TouchableOpacity>
-              <Text style={styles.sectorsEdit}>{String(t('edit')).toUpperCase()}</Text>
-            </TouchableOpacity>
           </View>
           <View style={[styles.chipsRow, isRTL && { flexDirection: 'row-reverse' }]}>
             {/* Chips */}
@@ -145,9 +129,6 @@ export default function ProfileScreen() {
         <View style={styles.hubContainer}>
           <View style={[styles.hubHeader, isRTL && { flexDirection: 'row-reverse' }]}>
             <Text style={styles.hubTitle}>{t('notificationHub')}</Text>
-            <TouchableOpacity style={styles.hubFilterBtn}>
-              <Ionicons name="options-outline" size={16} color={LocalColors.textMuted} />
-            </TouchableOpacity>
           </View>
 
           {/* Notif 1 */}
@@ -163,9 +144,6 @@ export default function ProfileScreen() {
               <Text style={[styles.notifText, isRTL && { textAlign: 'right' }]}>
                 A new Sustainable Energy Sukuk project in Aqaba aligns with your risk profile and sector interests.
               </Text>
-              <TouchableOpacity style={[styles.viewDetailsBtn, isRTL && { alignSelf: 'flex-end' }]}>
-                <Text style={styles.viewDetailsText}>{String(t('details')).toUpperCase()}</Text>
-              </TouchableOpacity>
             </View>
           </View>
 

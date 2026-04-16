@@ -38,6 +38,7 @@ import { WebView } from 'react-native-webview';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import CommonHeader from '../components/organisms/CommonHeader';
 
 // Services
 import { fetchMapZones } from '../services/firebase/mapService';
@@ -289,45 +290,7 @@ body{background:#000a1e;overflow:hidden;font-family:-apple-system,BlinkMacSystem
 </html>`;
 }
 
-// ---------------------------------------------------------------------------
-// Map Header — native Deep Navy gradient bar
-// ---------------------------------------------------------------------------
-function MapHeader({ t, lang, isRTL, onToggleLanguage }) {
-  return (
-    <LinearGradient
-      colors={['#000a1e', '#002147']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.header}
-    >
-      <SafeAreaView edges={['top']} style={styles.headerInner}>
-        <View style={[styles.headerRow, isRTL && styles.rowRTL]}>
-          <View>
-            <Text style={[styles.headerTitle, isRTL && styles.textRTL]}>
-              {t('mapTitle')}
-            </Text>
-            <View style={[styles.headerSubRow, isRTL && styles.rowRTL]}>
-              <View style={styles.subtitleDot} />
-              <Text style={styles.headerSubtitle}>{t('mapSubtitle')}</Text>
-            </View>
-          </View>
-
-          {/* Language toggle */}
-          <TouchableOpacity
-            style={styles.langToggle}
-            onPress={onToggleLanguage}
-            accessibilityRole="button"
-            accessibilityLabel="Toggle language"
-          >
-            <Text style={styles.langToggleText}>
-              {lang === 'ar' ? 'EN' : 'عر'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    </LinearGradient>
-  );
-}
+// Removing MapHeader usage in favor of CommonHeader
 
 // ---------------------------------------------------------------------------
 // Sector Legend — horizontal scrollable filter chips
@@ -616,13 +579,20 @@ export default function InvestmentMapScreen() {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
 
-      {/* Native header */}
-      <MapHeader
-        t={t}
-        lang={lang}
-        isRTL={isRTL}
-        onToggleLanguage={toggleLanguage}
-      />
+      {/* Global Header */}
+      <SafeAreaView edges={['top']} style={{ backgroundColor: '#002147' }}>
+        <CommonHeader isDark style={{ marginBottom: 15 }} />
+      </SafeAreaView>
+
+      <View style={{ backgroundColor: '#002147', paddingHorizontal: 20, paddingBottom: 15 }}>
+        <Text style={[styles.headerTitle, isRTL && styles.textRTL]}>
+          {t('mapTitle')}
+        </Text>
+        <View style={[styles.headerSubRow, isRTL && styles.rowRTL]}>
+          <View style={styles.subtitleDot} />
+          <Text style={styles.headerSubtitle}>{t('mapSubtitle')}</Text>
+        </View>
+      </View>
 
       {/* Sector legend */}
       <SectorLegend

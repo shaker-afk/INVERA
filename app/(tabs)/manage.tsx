@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useTranslation } from '../../src/hooks/useTranslation';
+import CommonHeader from '../../src/components/organisms/CommonHeader';
 
 const LocalColors = {
   background: '#FAFAFC', 
@@ -32,21 +33,7 @@ export default function ManageScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={[styles.headerRow, isRTL && { flexDirection: 'row-reverse' }]}>
-          <View style={[styles.headerLeft, isRTL && { flexDirection: 'row-reverse' }]}>
-            <Ionicons name="star" size={16} color={LocalColors.navy} style={{marginTop: -2}} />
-            <Text style={styles.headerBrand}>Sovereign Ledger</Text>
-          </View>
-          <View style={[styles.headerRight, isRTL && { flexDirection: 'row-reverse' }]}>
-            <View style={styles.avatarCircle}>
-              <Ionicons name="person" size={14} color={LocalColors.yellowText} />
-            </View>
-            <View style={styles.iconCircle}>
-              <Ionicons name="document-text" size={14} color={LocalColors.white} />
-            </View>
-          </View>
-        </View>
+        <CommonHeader />
 
         {/* Titles */}
         <View style={styles.pageTitles}>
@@ -98,13 +85,7 @@ export default function ManageScreen() {
         </View>
 
         {/* Your Listings Section */}
-        <View style={[styles.sectionHeader, isRTL && { flexDirection: 'row-reverse' }]}>
-          <Text style={styles.sectionTitle}>{t('yourListings')}</Text>
-          <View style={[styles.sectionHeaderRight, isRTL && { flexDirection: 'row-reverse' }]}>
-            <Text style={styles.viewAll}>{t('viewAllListings')}</Text>
-            <Feather name={isRTL ? "arrow-left" : "arrow-right"} size={16} color={LocalColors.textMuted} />
-          </View>
-        </View>
+
 
         {/* Listing Card: Live */}
         <View style={styles.listingCard}>
@@ -112,7 +93,7 @@ export default function ManageScreen() {
             <View style={styles.liveBadge}>
               <Text style={styles.liveBadgeText}>{t('live')}</Text>
             </View>
-            <Feather name="more-horizontal" size={20} color={LocalColors.textMuted} />
+
           </View>
           <Text style={[styles.listingTitle, isRTL && { textAlign: 'right' }]}>Al-Zarqa Industrial Hub Phase II</Text>
           <Text style={[styles.listingDesc, isRTL && { textAlign: 'right' }]}>
@@ -138,7 +119,7 @@ export default function ManageScreen() {
             <View style={styles.pendingBadge}>
               <Text style={styles.pendingBadgeText}>{t('pending')}</Text>
             </View>
-            <Feather name="more-horizontal" size={20} color={LocalColors.textMuted} />
+
           </View>
           <Text style={[styles.listingTitle, isRTL && { textAlign: 'right' }]}>Aqaba Coastal Hospitality Bond</Text>
           <Text style={[styles.listingDesc, isRTL && { textAlign: 'right' }]}>

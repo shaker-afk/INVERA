@@ -82,9 +82,7 @@ export default function ManageCredentialsModal() {
               <Text style={[styles.settingSub, isRTL && { textAlign: 'right' }]}>MacBook Air — Dubai, UAE</Text>
             </View>
           </View>
-          <TouchableOpacity>
-            <Text style={styles.revokeText}>{t('revokeText')}</Text>
-          </TouchableOpacity>
+
         </View>
       </ScrollView>
     </SafeAreaView>

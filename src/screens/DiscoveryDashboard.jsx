@@ -56,9 +56,11 @@ function SectionHeader({ title, actionLabel, isRTL, onAction }) {
   return (
     <View style={[sectionStyles.row, isRTL && sectionStyles.rowRTL]}>
       <Text style={[sectionStyles.title, isRTL && sectionStyles.textRTL]}>{title}</Text>
-      <TouchableOpacity onPress={onAction} accessibilityRole="button">
-        <Text style={sectionStyles.action}>{actionLabel}</Text>
-      </TouchableOpacity>
+      {onAction && (
+        <TouchableOpacity onPress={onAction} accessibilityRole="button">
+          <Text style={sectionStyles.action}>{actionLabel}</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

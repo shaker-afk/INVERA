@@ -76,11 +76,7 @@ export default function ActivityModal() {
                 </Text>
               )}
 
-              {item.action && (
-                <TouchableOpacity style={[styles.viewDetailsBtn, isRTL && { alignSelf: 'flex-end' }]}>
-                  <Text style={styles.viewDetailsText}>{item.action}</Text>
-                </TouchableOpacity>
-              )}
+
 
               {item.attachment && (
                 <View style={[styles.attachmentChip, isRTL && { flexDirection: 'row-reverse' }]}>

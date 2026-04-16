@@ -555,26 +555,7 @@ export default function ListingDetailScreen() {
         <View style={{ height: 100 }} />
       </ScrollView>
 
-      {/* ── Sticky Action Bar ── */}
-      <View style={styles.actionBar}>
-        <TouchableOpacity
-          style={styles.saveButton}
-          accessibilityRole="button"
-          accessibilityLabel={t('save')}
-        >
-          <Ionicons name="bookmark-outline" size={20} color={Colors.primaryContainer} />
-          <Text style={styles.saveLabel}>{t('save')}</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.investButton}
-          accessibilityRole="button"
-          accessibilityLabel={t('invest')}
-        >
-          <Text style={styles.investLabel}>{t('invest')}</Text>
-          <Ionicons name="arrow-forward" size={18} color={Colors.primary} />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
@@ -656,52 +637,5 @@ const styles = StyleSheet.create({
     ...Shadow.card,
   },
 
-  // Action bar
-  actionBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.md,
-    paddingTop: Spacing.md,
-    paddingBottom: Spacing.lg + Spacing.sm,
-    backgroundColor: Colors.surfaceContainerLowest,
-    borderTopLeftRadius: Radius.xl,
-    borderTopRightRadius: Radius.xl,
-    gap: Spacing.sm,
-    ...Shadow.modal,
-  },
-  saveButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xs,
-    borderWidth: 1.5,
-    borderColor: Colors.primaryContainer,
-    borderRadius: Radius.xl,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm + 2,
-  },
-  saveLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.primaryContainer,
-  },
-  investButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: Spacing.xs,
-    backgroundColor: Colors.warmSand,
-    borderRadius: Radius.xl,
-    paddingVertical: Spacing.sm + 4,
-  },
-  investLabel: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: Colors.primary,
-    letterSpacing: 0.2,
-  },
+
 });
