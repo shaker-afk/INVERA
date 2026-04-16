@@ -1,62 +1,587 @@
-/**
- * app/(tabs)/manage.tsx
- * Manage tab — placeholder until the portfolio management screen is built.
- */
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, Feather } from '@expo/vector-icons';
 
-const Colors = {
-  primaryContainer: '#002147',
-  surfaceContainerLow: '#f3f4f5',
-  onSurfaceVariant: '#44474e',
+const LocalColors = {
+  background: '#FAFAFC', 
+  navy: '#051930',
+  navyLight: '#0d2a4a',
+  gold: '#E3C88D',
+  goldLight: '#F3E5C8',
+  white: '#FFFFFF',
+  text: '#111827',
+  textMuted: '#6B7280',
+  textLight: '#9CA3AF',
+  lightGray: '#F3F4F6',
+  border: '#E5E7EB',
+  greenBg: '#ECFDF5',
+  greenText: '#059669',
+  yellowBg: '#FEF3C7',
+  yellowText: '#D97706',
 };
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function ManageScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.body}>
-        <View style={styles.iconWrap}>
-          <Ionicons name="briefcase-outline" size={48} color={Colors.primaryContainer} />
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View style={styles.headerRow}>
+          <View style={styles.headerLeft}>
+            <Ionicons name="star" size={16} color={LocalColors.navy} style={{marginTop: -2}} />
+            <Text style={styles.headerBrand}>Sovereign Ledger</Text>
+          </View>
+          <View style={styles.headerRight}>
+            <View style={styles.avatarCircle}>
+              <Ionicons name="person" size={14} color={LocalColors.yellowText} />
+            </View>
+            <View style={styles.iconCircle}>
+              <Ionicons name="document-text" size={14} color={LocalColors.white} />
+            </View>
+          </View>
         </View>
-        <Text style={styles.title}>Portfolio Manager</Text>
-        <Text style={styles.sub}>
-          Track and manage your active investments here. Coming soon.
-        </Text>
-      </View>
+
+        {/* Titles */}
+        <View style={styles.pageTitles}>
+          <Text style={styles.entityDash}>ENTITY DASHBOARD</Text>
+          <Text style={styles.companyName}>Petra Holdings Ltd.</Text>
+          <TouchableOpacity style={styles.createBtn}>
+            <Feather name="plus" size={16} color={LocalColors.white} />
+            <Text style={styles.createBtnText}>Create Listing</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Engagement Tracker Card */}
+        <View style={styles.engagementCard}>
+          <View style={styles.engagementHeader}>
+            <View style={{ flex: 1, paddingRight: 10 }}>
+              <Text style={styles.cardTitle}>Engagement Tracker</Text>
+              <Text style={styles.cardSub}>Monthly reach & inquiry volume</Text>
+            </View>
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={styles.engagementNumber}>12,482</Text>
+              <Text style={styles.engagementGrowth}>+14.3% vs last month</Text>
+            </View>
+          </View>
+          <View style={styles.chartContainer}>
+            {[1, 2.5, 2, 4, 7, 3, 4, 5, 3.5].map((heightMulti, idx) => (
+              <View 
+                key={idx} 
+                style={[
+                  styles.bar, 
+                  idx === 4 && styles.activeBar, 
+                  { height: heightMulti * 12 }
+                ]} 
+              />
+            ))}
+          </View>
+        </View>
+
+        {/* Total Capital Raised Card */}
+        <View style={styles.capitalCard}>
+          <View style={styles.capitalIcon}>
+            <Ionicons name="wallet-outline" size={20} color={LocalColors.gold} />
+          </View>
+          <Text style={styles.capitalTitle}>Total Capital Raised</Text>
+          <Text style={styles.capitalSub}>PORTFOLIO VALUE</Text>
+          <Text style={styles.capitalAmount}>JOD 2.45M</Text>
+        </View>
+
+        {/* Your Listings Section */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Your Listings</Text>
+          <View style={styles.sectionHeaderRight}>
+            <Text style={styles.viewAll}>View All Listings</Text>
+            <Feather name="arrow-right" size={16} color={LocalColors.textMuted} />
+          </View>
+        </View>
+
+        {/* Listing Card: Live */}
+        <View style={styles.listingCard}>
+          <View style={styles.listingHeader}>
+            <View style={styles.liveBadge}>
+              <Text style={styles.liveBadgeText}>LIVE</Text>
+            </View>
+            <Feather name="more-horizontal" size={20} color={LocalColors.textMuted} />
+          </View>
+          <Text style={styles.listingTitle}>Al-Zarqa Industrial Hub Phase II</Text>
+          <Text style={styles.listingDesc}>
+            Strategic logistics and warehousing expansive project located in the heart of th...
+          </Text>
+          <View style={styles.listingFooter}>
+            <View style={styles.avatars}>
+              <View style={[styles.avatarStack, { zIndex: 2, backgroundColor: '#374151' }]} />
+              <View style={[styles.avatarStack, { zIndex: 1, marginLeft: -10, backgroundColor: '#4B5563' }]} />
+              <View style={[styles.avatarStack, { zIndex: 0, marginLeft: -10, backgroundColor: LocalColors.lightGray, alignItems: 'center', justifyContent: 'center' }]}>
+                <Text style={{ fontSize: 10, color: LocalColors.textMuted }}>+12</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.editBtn}>
+              <Text style={styles.editBtnText}>Edit</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Listing Card: Pending */}
+        <View style={styles.listingCard}>
+          <View style={styles.listingHeader}>
+            <View style={styles.pendingBadge}>
+              <Text style={styles.pendingBadgeText}>PENDING</Text>
+            </View>
+            <Feather name="more-horizontal" size={20} color={LocalColors.textMuted} />
+          </View>
+          <Text style={styles.listingTitle}>Aqaba Coastal Hospitality Bond</Text>
+          <Text style={styles.listingDesc}>
+            Fixed-income sovereign instrument for the redevelopment of the Aqaba waterfront...
+          </Text>
+          <View style={styles.listingFooter}>
+            <Text style={styles.complianceText}>Under compliance review</Text>
+            <TouchableOpacity style={styles.editBtn}>
+              <Text style={styles.editBtnText}>Edit</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* New Listing Card */}
+        <TouchableOpacity style={styles.newListingCard}>
+          <View style={styles.newListingIcon}>
+            <Feather name="plus" size={16} color={LocalColors.white} />
+          </View>
+          <Text style={styles.newListingTitle}>New Listing</Text>
+          <Text style={styles.newListingSub}>Start a new investment entity</Text>
+        </TouchableOpacity>
+
+        {/* Document Vault Section */}
+        <View style={styles.vaultSection}>
+          <View style={styles.vaultHeader}>
+            <View style={styles.vaultIconContainer}>
+              <Ionicons name="folder" size={14} color={LocalColors.navy} />
+            </View>
+            <Text style={styles.vaultTitle}>Document Vault</Text>
+          </View>
+
+          {/* Doc 1 */}
+          <View style={styles.docCard}>
+            <View style={styles.docIconWrapper}>
+              <Ionicons name="document-text" size={16} color={LocalColors.navy} />
+            </View>
+            <View style={styles.docTextWrapper}>
+              <Text style={styles.docName} numberOfLines={1}>Business_Registration_2024.pdf</Text>
+              <Text style={styles.docType}>OFFICIAL INCORPORATION</Text>
+            </View>
+          </View>
+          
+          {/* Doc 2 */}
+          <View style={styles.docCard}>
+            <View style={styles.docIconWrapper}>
+              <Ionicons name="document-text" size={16} color={LocalColors.navy} />
+            </View>
+            <View style={styles.docTextWrapper}>
+              <Text style={styles.docName} numberOfLines={1}>Compliance_Audit_Q3.pdf</Text>
+              <Text style={styles.docType}>LEGAL CLEARANCE</Text>
+            </View>
+            <View style={styles.docBadge}>
+              <Text style={styles.docBadgeText}>UNDER REVIEW</Text>
+            </View>
+          </View>
+
+          {/* Doc 3 */}
+          <View style={styles.docCard}>
+            <View style={styles.docIconWrapper}>
+              <Ionicons name="document-text" size={16} color={LocalColors.navy} />
+            </View>
+            <View style={styles.docTextWrapper}>
+              <Text style={styles.docName} numberOfLines={1}>Tax_Certificate_ID_882.pdf</Text>
+              <Text style={styles.docType}>TAX COMPLIANCE</Text>
+            </View>
+            <Ionicons name="checkmark-circle" size={18} color={LocalColors.gold} />
+          </View>
+        </View>
+
+        {/* Extra spacing at bottom for tab bar padding */}
+        <View style={{height: 100}} />
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.surfaceContainerLow },
-  body: {
+  container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 16,
-    paddingHorizontal: 32,
+    backgroundColor: LocalColors.background,
   },
-  iconWrap: {
-    width: 88,
-    height: 88,
-    borderRadius: 44,
-    backgroundColor: '#e7e8e9',
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 40,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  headerBrand: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: LocalColors.navy,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  avatarCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: LocalColors.goldLight,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  iconCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: LocalColors.navy,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pageTitles: {
+    marginBottom: 24,
+  },
+  entityDash: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#A0814C', /* Gold/brown text */
+    letterSpacing: 1.2,
+    marginBottom: 6,
+  },
+  companyName: {
+    fontSize: 28,
+    fontWeight: '900',
+    color: LocalColors.navy,
+    marginBottom: 16,
+    letterSpacing: -0.5,
+  },
+  createBtn: {
+    backgroundColor: LocalColors.navy,
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    gap: 6,
+  },
+  createBtnText: {
+    color: LocalColors.white,
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  engagementCard: {
+    backgroundColor: LocalColors.white,
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  engagementHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 30,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: LocalColors.navy,
+    marginBottom: 4,
+  },
+  cardSub: {
+    fontSize: 12,
+    color: LocalColors.textMuted,
+    lineHeight: 16,
+  },
+  engagementNumber: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: LocalColors.navy,
+    marginBottom: 4,
+  },
+  engagementGrowth: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#A0814C', 
+  },
+  chartContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    height: 100,
+  },
+  bar: {
+    width: 18,
+    backgroundColor: LocalColors.lightGray,
+    borderRadius: 6,
+  },
+  activeBar: {
+    backgroundColor: LocalColors.navy,
+  },
+  capitalCard: {
+    backgroundColor: LocalColors.navy,
+    borderRadius: 20,
+    padding: 24,
+    marginBottom: 30,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  capitalIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: 'rgba(227, 200, 141, 0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 40,
+  },
+  capitalTitle: {
+    color: LocalColors.white,
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  capitalSub: {
+    color: '#8BA1B8',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+  capitalAmount: {
+    color: LocalColors.white,
+    fontSize: 28,
+    fontWeight: '800',
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: LocalColors.navy,
+  },
+  sectionHeaderRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  viewAll: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: LocalColors.navy,
+  },
+  listingCard: {
+    backgroundColor: LocalColors.white,
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.02)',
+  },
+  listingHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  liveBadge: {
+    backgroundColor: LocalColors.greenBg,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  liveBadgeText: {
+    color: LocalColors.greenText,
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  pendingBadge: {
+    backgroundColor: LocalColors.yellowBg,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  pendingBadgeText: {
+    color: LocalColors.yellowText,
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  listingTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: LocalColors.navy,
     marginBottom: 8,
   },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: Colors.primaryContainer,
-    letterSpacing: -0.4,
+  listingDesc: {
+    fontSize: 13,
+    color: LocalColors.textMuted,
+    lineHeight: 18,
+    marginBottom: 16,
   },
-  sub: {
+  listingFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  avatars: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  avatarStack: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: LocalColors.white,
+  },
+  editBtn: {
+    backgroundColor: '#F3F4F6',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  editBtnText: {
+    color: LocalColors.navy,
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  complianceText: {
+    fontSize: 12,
+    fontStyle: 'italic',
+    color: LocalColors.textLight,
+  },
+  newListingCard: {
+    borderWidth: 1.5,
+    borderColor: '#D1D5DB',
+    borderStyle: 'dashed',
+    borderRadius: 20,
+    padding: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 30,
+  },
+  newListingIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: LocalColors.textMuted,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  newListingTitle: {
     fontSize: 14,
-    color: Colors.onSurfaceVariant,
-    textAlign: 'center',
-    lineHeight: 21,
+    fontWeight: '700',
+    color: LocalColors.navy,
+    marginBottom: 4,
+  },
+  newListingSub: {
+    fontSize: 12,
+    color: LocalColors.textMuted,
+  },
+  vaultSection: {
+    backgroundColor: LocalColors.lightGray,
+    borderRadius: 24,
+    padding: 20,
+  },
+  vaultHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 16,
+  },
+  vaultIconContainer: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#E6D3A0',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  vaultTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: LocalColors.navy,
+  },
+  docCard: {
+    backgroundColor: LocalColors.white,
+    borderRadius: 16,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  docIconWrapper: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: LocalColors.lightGray,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  docTextWrapper: {
+    flex: 1,
+    paddingRight: 10,
+  },
+  docName: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: LocalColors.navy,
+    marginBottom: 4,
+    maxWidth: '95%',
+  },
+  docType: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: LocalColors.textMuted,
+    letterSpacing: 0.5,
+  },
+  docBadge: {
+    backgroundColor: '#F3F4F6',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  docBadgeText: {
+    fontSize: 8,
+    fontWeight: '800',
+    color: LocalColors.textMuted,
   },
 });
