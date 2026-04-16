@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useTranslation } from '../../src/hooks/useTranslation';
 
 const LocalColors = {
   background: '#FAFAFC', 
@@ -24,17 +26,19 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function ProfileScreen() {
   const [activeTab, setActiveTab] = useState<'Investor' | 'Company'>('Investor');
+  const router = useRouter();
+  const { t, isRTL } = useTranslation();
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View style={styles.headerRow}>
-          <View style={styles.headerLeft}>
+        <View style={[styles.headerRow, isRTL && { flexDirection: 'row-reverse' }]}>
+          <View style={[styles.headerLeft, isRTL && { flexDirection: 'row-reverse' }]}>
             <Ionicons name="star" size={16} color={LocalColors.navy} style={{marginTop: -2}} />
             <Text style={styles.headerBrand}>Sovereign Ledger</Text>
           </View>
-          <View style={styles.headerRight}>
+          <View style={[styles.headerRight, isRTL && { flexDirection: 'row-reverse' }]}>
             <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
               <Feather name="search" size={18} color={LocalColors.textMuted} />
             </TouchableOpacity>
@@ -46,30 +50,30 @@ export default function ProfileScreen() {
 
         {/* Profile Card */}
         <View style={styles.profileCard}>
-          <View style={styles.profileHeader}>
-            <View style={styles.avatarContainer}>
+          <View style={[styles.profileHeader, isRTL && { flexDirection: 'row-reverse' }]}>
+            <View style={[styles.avatarContainer, isRTL ? { marginLeft: 20, marginRight: 0 } : { marginRight: 20 }]}>
               <View style={styles.avatarPlaceholder}>
                 <Ionicons name="person" size={40} color={LocalColors.white} />
               </View>
               {/* PRO Badge */}
-              <View style={styles.proBadge}>
-                <Text style={styles.proBadgeText}>PRO</Text>
+              <View style={[styles.proBadge, isRTL ? { left: -10, right: 'auto' } : { right: -10, left: 'auto' }]}>
+                <Text style={styles.proBadgeText}>{t('pro')}</Text>
               </View>
             </View>
             <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>Ahmad Al-{'\n'}Fahad</Text>
-              <Text style={styles.profileRole}>Wealth Management{'\n'}Portfolio</Text>
+              <Text style={[styles.profileName, isRTL && { textAlign: 'right' }]}>Ahmad Al-{'\n'}Fahad</Text>
+              <Text style={[styles.profileRole, isRTL && { textAlign: 'right' }]}>{t('wealthManagement')}</Text>
             </View>
           </View>
 
           {/* Toggle Switch */}
-          <View style={styles.toggleContainer}>
+          <View style={[styles.toggleContainer, isRTL && { flexDirection: 'row-reverse' }]}>
             <TouchableOpacity 
               style={[styles.toggleBtn, activeTab === 'Investor' && styles.toggleActive]}
               onPress={() => setActiveTab('Investor')}
             >
               <Text style={[styles.toggleBtnText, activeTab === 'Investor' && styles.toggleActiveText]}>
-                Investor
+                {t('investor')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity 
@@ -77,7 +81,7 @@ export default function ProfileScreen() {
               onPress={() => setActiveTab('Company')}
             >
               <Text style={[styles.toggleBtnText, activeTab === 'Company' && styles.toggleActiveText]}>
-                Company
+                {t('company')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -85,144 +89,144 @@ export default function ProfileScreen() {
 
         {/* Sector Interests */}
         <View style={styles.sectorsContainer}>
-          <View style={styles.sectorsHeader}>
-            <Text style={styles.sectorsTitle}>Sector Interests</Text>
+          <View style={[styles.sectorsHeader, isRTL && { flexDirection: 'row-reverse' }]}>
+            <Text style={styles.sectorsTitle}>{t('sectorInterests')}</Text>
             <TouchableOpacity>
-              <Text style={styles.sectorsEdit}>EDIT</Text>
+              <Text style={styles.sectorsEdit}>{t('edit').toUpperCase()}</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.chipsRow}>
+          <View style={[styles.chipsRow, isRTL && { flexDirection: 'row-reverse' }]}>
             {/* Chips */}
-            <View style={styles.chip}>
+            <View style={[styles.chip, isRTL && { flexDirection: 'row-reverse' }]}>
               <Ionicons name="leaf-outline" size={14} color="#556B2F" />
-              <Text style={styles.chipText}>Green Energy</Text>
+              <Text style={styles.chipText}>{t('greenEnergy')}</Text>
             </View>
-            <View style={styles.chip}>
+            <View style={[styles.chip, isRTL && { flexDirection: 'row-reverse' }]}>
               <Ionicons name="business-outline" size={14} color="#8D6E63" />
-              <Text style={styles.chipText}>Real Estate</Text>
+              <Text style={styles.chipText}>{t('realEstate')}</Text>
             </View>
-            <View style={styles.chip}>
+            <View style={[styles.chip, isRTL && { flexDirection: 'row-reverse' }]}>
               <Ionicons name="shield-checkmark-outline" size={14} color="#D4AF37" />
-              <Text style={styles.chipText}>MedTech</Text>
+              <Text style={styles.chipText}>{t('medTech')}</Text>
             </View>
-            <View style={styles.chip}>
+            <View style={[styles.chip, isRTL && { flexDirection: 'row-reverse' }]}>
               <Ionicons name="card-outline" size={14} color="#8D6E63" />
-              <Text style={styles.chipText}>FinTech</Text>
+              <Text style={styles.chipText}>{t('finTech')}</Text>
             </View>
-            <View style={styles.chip}>
+            <View style={[styles.chip, isRTL && { flexDirection: 'row-reverse' }]}>
               <Ionicons name="flower-outline" size={14} color="#556B2F" />
-              <Text style={styles.chipText}>AgriTech</Text>
+              <Text style={styles.chipText}>{t('agriTech')}</Text>
             </View>
           </View>
           
-          <TouchableOpacity style={styles.addInterestBtn}>
+          <TouchableOpacity style={[styles.addInterestBtn, isRTL && { flexDirection: 'row-reverse' }]} onPress={() => router.push('/add-interest')}>
             <Feather name="plus" size={16} color={LocalColors.textMuted} />
-            <Text style={styles.addInterestText}>ADD INTEREST</Text>
+            <Text style={styles.addInterestText}>{t('addInterest')}</Text>
           </TouchableOpacity>
         </View>
 
         {/* Institutional Security */}
-        <View style={styles.securityCard}>
+        <View style={[styles.securityCard, isRTL && { alignItems: 'flex-end' }]}>
           <View style={styles.securityIconBg}>
             <MaterialCommunityIcons name="shield-check" size={20} color={LocalColors.goldLight} />
           </View>
-          <Text style={styles.securityTitle}>Institutional Security</Text>
-          <Text style={styles.securityDesc}>
-            Your ledger is protected by multi-factor sovereign encryption protocols.
+          <Text style={[styles.securityTitle, isRTL && { textAlign: 'right' }]}>{t('institutionalSecurity')}</Text>
+          <Text style={[styles.securityDesc, isRTL && { textAlign: 'right' }]}>
+            {t('securityDesc')}
           </Text>
-          <TouchableOpacity style={styles.securityLinkBtn}>
-            <Text style={styles.securityLink}>MANAGE CREDENTIALS</Text>
-            <Feather name="arrow-right" size={14} color={LocalColors.goldLight} />
+          <TouchableOpacity style={[styles.securityLinkBtn, isRTL && { flexDirection: 'row-reverse' }]} onPress={() => router.push('/manage-credentials')}>
+            <Text style={styles.securityLink}>{t('manageCredentials')}</Text>
+            <Feather name={isRTL ? "arrow-left" : "arrow-right"} size={14} color={LocalColors.goldLight} />
           </TouchableOpacity>
-          <Feather name="star" size={120} color="rgba(255,255,255,0.03)" style={styles.securityBgStar} />
+          <Feather name="star" size={120} color="rgba(255,255,255,0.03)" style={[styles.securityBgStar, isRTL ? { left: -20, right: 'auto' } : { right: -20, left: 'auto' }]} />
         </View>
 
         {/* Notification Hub */}
         <View style={styles.hubContainer}>
-          <View style={styles.hubHeader}>
-            <Text style={styles.hubTitle}>Notification Hub</Text>
+          <View style={[styles.hubHeader, isRTL && { flexDirection: 'row-reverse' }]}>
+            <Text style={styles.hubTitle}>{t('notificationHub')}</Text>
             <TouchableOpacity style={styles.hubFilterBtn}>
               <Ionicons name="options-outline" size={16} color={LocalColors.textMuted} />
             </TouchableOpacity>
           </View>
 
           {/* Notif 1 */}
-          <View style={styles.notifRow}>
-            <View style={[styles.notifIcon, { backgroundColor: LocalColors.goldBg }]}>
+          <View style={[styles.notifRow, isRTL && { flexDirection: 'row-reverse' }]}>
+            <View style={[styles.notifIcon, { backgroundColor: LocalColors.goldBg }, isRTL ? { marginLeft: 16, marginRight: 0 } : { marginRight: 16 }]}>
               <MaterialCommunityIcons name="asterisk" size={18} color={LocalColors.gold} />
             </View>
             <View style={styles.notifContent}>
-              <View style={styles.notifTitleRow}>
-                <Text style={styles.notifTitle}>New Match Alert</Text>
-                <Text style={styles.notifTime}>2M AGO</Text>
+              <View style={[styles.notifTitleRow, isRTL && { flexDirection: 'row-reverse' }]}>
+                <Text style={[styles.notifTitle, isRTL ? { paddingLeft: 10, paddingRight: 0, textAlign: 'right' } : { paddingRight: 10 }]}>{t('newMatchAlert')}</Text>
+                <Text style={styles.notifTime}>{t('timeAgo2M')}</Text>
               </View>
-              <Text style={styles.notifText}>
+              <Text style={[styles.notifText, isRTL && { textAlign: 'right' }]}>
                 A new Sustainable Energy Sukuk project in Aqaba aligns with your risk profile and sector interests.
               </Text>
-              <TouchableOpacity style={styles.viewDetailsBtn}>
-                <Text style={styles.viewDetailsText}>VIEW DETAILS</Text>
+              <TouchableOpacity style={[styles.viewDetailsBtn, isRTL && { alignSelf: 'flex-end' }]}>
+                <Text style={styles.viewDetailsText}>{t('details').toUpperCase()}</Text>
               </TouchableOpacity>
             </View>
           </View>
 
           {/* Notif 2 */}
-          <View style={styles.notifRow}>
-            <View style={[styles.notifIcon, { backgroundColor: LocalColors.lightGray }]}>
+          <View style={[styles.notifRow, isRTL && { flexDirection: 'row-reverse' }]}>
+            <View style={[styles.notifIcon, { backgroundColor: LocalColors.lightGray }, isRTL ? { marginLeft: 16, marginRight: 0 } : { marginRight: 16 }]}>
               <Feather name="mail" size={16} color={LocalColors.navy} />
             </View>
             <View style={styles.notifContent}>
-              <View style={styles.notifTitleRow}>
-                <Text style={styles.notifTitle}>Message from Al-Zaman Equity</Text>
-                <View style={styles.timeBadgeContainer}>
-                  <Text style={styles.notifTime}>1H AGO</Text>
+              <View style={[styles.notifTitleRow, isRTL && { flexDirection: 'row-reverse' }]}>
+                <Text style={[styles.notifTitle, isRTL ? { paddingLeft: 10, paddingRight: 0, textAlign: 'right' } : { paddingRight: 10 }]}>{t('messageFrom')}</Text>
+                <View style={[styles.timeBadgeContainer, isRTL && { flexDirection: 'row-reverse' }]}>
+                  <Text style={styles.notifTime}>{t('timeAgo1H')}</Text>
                   <View style={styles.unreadDot} />
                 </View>
               </View>
-              <Text style={[styles.notifText, { fontStyle: 'italic' }]}>
+              <Text style={[styles.notifText, { fontStyle: 'italic' }, isRTL && { textAlign: 'right' }]}>
                 "Regarding the Series B proposal, we have updated the term sheet with the requested amendments..."
               </Text>
             </View>
           </View>
 
           {/* Notif 3 */}
-          <View style={styles.notifRow}>
-            <View style={[styles.notifIcon, { backgroundColor: LocalColors.goldBg }]}>
+          <View style={[styles.notifRow, isRTL && { flexDirection: 'row-reverse' }]}>
+            <View style={[styles.notifIcon, { backgroundColor: LocalColors.goldBg }, isRTL ? { marginLeft: 16, marginRight: 0 } : { marginRight: 16 }]}>
               <Ionicons name="document-text" size={16} color={LocalColors.navy} />
             </View>
             <View style={styles.notifContent}>
-              <View style={styles.notifTitleRow}>
-                <Text style={styles.notifTitle}>Document Status Update</Text>
-                <Text style={styles.notifTime}>4H AGO</Text>
+              <View style={[styles.notifTitleRow, isRTL && { flexDirection: 'row-reverse' }]}>
+                <Text style={[styles.notifTitle, isRTL ? { paddingLeft: 10, paddingRight: 0, textAlign: 'right' } : { paddingRight: 10 }]}>{t('documentStatusUpdate')}</Text>
+                <Text style={styles.notifTime}>{t('timeAgo4H')}</Text>
               </View>
-              <Text style={styles.notifText}>
-                Your KYC Verification for the 'Desert Pearl' development has been <Text style={styles.approvedText}>Approved.</Text>
+              <Text style={[styles.notifText, isRTL && { textAlign: 'right' }]}>
+                Your KYC Verification for the 'Desert Pearl' development has been <Text style={styles.approvedText}>{t('approved')}</Text>
               </Text>
-              <View style={styles.attachmentChip}>
+              <View style={[styles.attachmentChip, isRTL && { flexDirection: 'row-reverse' }]}>
                 <Ionicons name="document-text" size={14} color={LocalColors.textMuted} />
                 <Text style={styles.attachmentName}>verification_seal_v2.pdf</Text>
-                <Feather name="download" size={14} color={LocalColors.textMuted} style={{marginLeft: 'auto'}} />
+                <Feather name="download" size={14} color={LocalColors.textMuted} style={isRTL ? {marginRight: 'auto'} : {marginLeft: 'auto'}} />
               </View>
             </View>
           </View>
 
           {/* Notif 4 */}
-          <View style={styles.notifRow}>
-            <View style={[styles.notifIcon, { backgroundColor: LocalColors.goldBg }]}>
+          <View style={[styles.notifRow, isRTL && { flexDirection: 'row-reverse' }]}>
+            <View style={[styles.notifIcon, { backgroundColor: LocalColors.goldBg }, isRTL ? { marginLeft: 16, marginRight: 0 } : { marginRight: 16 }]}>
               <MaterialCommunityIcons name="shield-check" size={16} color={LocalColors.navy} />
             </View>
             <View style={styles.notifContent}>
-              <View style={styles.notifTitleRow}>
-                <Text style={styles.notifTitle}>Login Detected</Text>
-                <Text style={styles.notifTime}>YESTERDAY</Text>
+              <View style={[styles.notifTitleRow, isRTL && { flexDirection: 'row-reverse' }]}>
+                <Text style={[styles.notifTitle, isRTL ? { paddingLeft: 10, paddingRight: 0, textAlign: 'right' } : { paddingRight: 10 }]}>{t('loginDetected')}</Text>
+                <Text style={styles.notifTime}>{t('yesterday')}</Text>
               </View>
-              <Text style={styles.notifText}>
+              <Text style={[styles.notifText, isRTL && { textAlign: 'right' }]}>
                 A successful login was recorded from a new Safari browser in Amman, Jordan.
               </Text>
             </View>
           </View>
 
-          <TouchableOpacity style={styles.viewAllActivity}>
-            <Text style={styles.viewAllActivityText}>VIEW ALL ACTIVITY</Text>
+          <TouchableOpacity style={styles.viewAllActivity} onPress={() => router.push('/activity')}>
+            <Text style={styles.viewAllActivityText}>{t('viewAllActivity')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -280,7 +284,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   avatarContainer: {
-    marginRight: 20,
     position: 'relative',
   },
   avatarPlaceholder: {
@@ -294,7 +297,6 @@ const styles = StyleSheet.create({
   proBadge: {
     position: 'absolute',
     bottom: -6,
-    right: -10,
     backgroundColor: LocalColors.goldLight,
     paddingHorizontal: 8,
     paddingVertical: 2,
@@ -457,7 +459,6 @@ const styles = StyleSheet.create({
   },
   securityBgStar: {
     position: 'absolute',
-    right: -20,
     top: -10,
     zIndex: 0,
     transform: [{ rotate: '15deg' }],
@@ -502,7 +503,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
   },
   notifContent: {
     flex: 1,
@@ -518,7 +518,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: LocalColors.navy,
     flex: 1,
-    paddingRight: 10,
   },
   timeBadgeContainer: {
     flexDirection: 'row',
@@ -547,7 +546,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 16,
-    alignSelf: 'flex-start',
   },
   viewDetailsText: {
     fontSize: 10,

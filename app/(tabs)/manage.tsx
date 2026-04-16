@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useTranslation } from '../../src/hooks/useTranslation';
 
 const LocalColors = {
   background: '#FAFAFC', 
@@ -24,16 +26,19 @@ const LocalColors = {
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function ManageScreen() {
+  const router = useRouter();
+  const { t, isRTL } = useTranslation();
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View style={styles.headerRow}>
-          <View style={styles.headerLeft}>
+        <View style={[styles.headerRow, isRTL && { flexDirection: 'row-reverse' }]}>
+          <View style={[styles.headerLeft, isRTL && { flexDirection: 'row-reverse' }]}>
             <Ionicons name="star" size={16} color={LocalColors.navy} style={{marginTop: -2}} />
             <Text style={styles.headerBrand}>Sovereign Ledger</Text>
           </View>
-          <View style={styles.headerRight}>
+          <View style={[styles.headerRight, isRTL && { flexDirection: 'row-reverse' }]}>
             <View style={styles.avatarCircle}>
               <Ionicons name="person" size={14} color={LocalColors.yellowText} />
             </View>
@@ -45,27 +50,30 @@ export default function ManageScreen() {
 
         {/* Titles */}
         <View style={styles.pageTitles}>
-          <Text style={styles.entityDash}>ENTITY DASHBOARD</Text>
-          <Text style={styles.companyName}>Petra Holdings Ltd.</Text>
-          <TouchableOpacity style={styles.createBtn}>
+          <Text style={[styles.entityDash, isRTL && { textAlign: 'right' }]}>{t('entityDashboard')}</Text>
+          <Text style={[styles.companyName, isRTL && { textAlign: 'right' }]}>Petra Holdings Ltd.</Text>
+          <TouchableOpacity 
+            style={[styles.createBtn, isRTL && { flexDirection: 'row-reverse', alignSelf: 'flex-end' }]} 
+            onPress={() => router.push('/create-listing')}
+          >
             <Feather name="plus" size={16} color={LocalColors.white} />
-            <Text style={styles.createBtnText}>Create Listing</Text>
+            <Text style={styles.createBtnText}>{t('createListing')}</Text>
           </TouchableOpacity>
         </View>
 
         {/* Engagement Tracker Card */}
         <View style={styles.engagementCard}>
-          <View style={styles.engagementHeader}>
-            <View style={{ flex: 1, paddingRight: 10 }}>
-              <Text style={styles.cardTitle}>Engagement Tracker</Text>
-              <Text style={styles.cardSub}>Monthly reach & inquiry volume</Text>
+          <View style={[styles.engagementHeader, isRTL && { flexDirection: 'row-reverse' }]}>
+            <View style={[{ flex: 1 }, isRTL ? { paddingLeft: 10 } : { paddingRight: 10 }]}>
+              <Text style={[styles.cardTitle, isRTL && { textAlign: 'right' }]}>{t('engagementTracker')}</Text>
+              <Text style={[styles.cardSub, isRTL && { textAlign: 'right' }]}>{t('engagementDesc')}</Text>
             </View>
-            <View style={{ alignItems: 'flex-end' }}>
+            <View style={isRTL ? { alignItems: 'flex-start' } : { alignItems: 'flex-end' }}>
               <Text style={styles.engagementNumber}>12,482</Text>
-              <Text style={styles.engagementGrowth}>+14.3% vs last month</Text>
+              <Text style={styles.engagementGrowth}>{t('engagementGrowth')}</Text>
             </View>
           </View>
-          <View style={styles.chartContainer}>
+          <View style={[styles.chartContainer, isRTL && { flexDirection: 'row-reverse' }]}>
             {[1, 2.5, 2, 4, 7, 3, 4, 5, 3.5].map((heightMulti, idx) => (
               <View 
                 key={idx} 
@@ -80,121 +88,121 @@ export default function ManageScreen() {
         </View>
 
         {/* Total Capital Raised Card */}
-        <View style={styles.capitalCard}>
+        <View style={[styles.capitalCard, isRTL && { alignItems: 'flex-end' }]}>
           <View style={styles.capitalIcon}>
             <Ionicons name="wallet-outline" size={20} color={LocalColors.gold} />
           </View>
-          <Text style={styles.capitalTitle}>Total Capital Raised</Text>
-          <Text style={styles.capitalSub}>PORTFOLIO VALUE</Text>
-          <Text style={styles.capitalAmount}>JOD 2.45M</Text>
+          <Text style={[styles.capitalTitle, isRTL && { textAlign: 'right' }]}>{t('totalCapitalRaised')}</Text>
+          <Text style={[styles.capitalSub, isRTL && { textAlign: 'right' }]}>{t('portfolioValue')}</Text>
+          <Text style={[styles.capitalAmount, isRTL && { textAlign: 'right' }]}>JOD 2.45M</Text>
         </View>
 
         {/* Your Listings Section */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Your Listings</Text>
-          <View style={styles.sectionHeaderRight}>
-            <Text style={styles.viewAll}>View All Listings</Text>
-            <Feather name="arrow-right" size={16} color={LocalColors.textMuted} />
+        <View style={[styles.sectionHeader, isRTL && { flexDirection: 'row-reverse' }]}>
+          <Text style={styles.sectionTitle}>{t('yourListings')}</Text>
+          <View style={[styles.sectionHeaderRight, isRTL && { flexDirection: 'row-reverse' }]}>
+            <Text style={styles.viewAll}>{t('viewAllListings')}</Text>
+            <Feather name={isRTL ? "arrow-left" : "arrow-right"} size={16} color={LocalColors.textMuted} />
           </View>
         </View>
 
         {/* Listing Card: Live */}
         <View style={styles.listingCard}>
-          <View style={styles.listingHeader}>
+          <View style={[styles.listingHeader, isRTL && { flexDirection: 'row-reverse' }]}>
             <View style={styles.liveBadge}>
-              <Text style={styles.liveBadgeText}>LIVE</Text>
+              <Text style={styles.liveBadgeText}>{t('live')}</Text>
             </View>
             <Feather name="more-horizontal" size={20} color={LocalColors.textMuted} />
           </View>
-          <Text style={styles.listingTitle}>Al-Zarqa Industrial Hub Phase II</Text>
-          <Text style={styles.listingDesc}>
+          <Text style={[styles.listingTitle, isRTL && { textAlign: 'right' }]}>Al-Zarqa Industrial Hub Phase II</Text>
+          <Text style={[styles.listingDesc, isRTL && { textAlign: 'right' }]}>
             Strategic logistics and warehousing expansive project located in the heart of th...
           </Text>
-          <View style={styles.listingFooter}>
-            <View style={styles.avatars}>
+          <View style={[styles.listingFooter, isRTL && { flexDirection: 'row-reverse' }]}>
+            <View style={[styles.avatars, isRTL && { flexDirection: 'row-reverse' }]}>
               <View style={[styles.avatarStack, { zIndex: 2, backgroundColor: '#374151' }]} />
               <View style={[styles.avatarStack, { zIndex: 1, marginLeft: -10, backgroundColor: '#4B5563' }]} />
               <View style={[styles.avatarStack, { zIndex: 0, marginLeft: -10, backgroundColor: LocalColors.lightGray, alignItems: 'center', justifyContent: 'center' }]}>
                 <Text style={{ fontSize: 10, color: LocalColors.textMuted }}>+12</Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.editBtn}>
-              <Text style={styles.editBtnText}>Edit</Text>
+            <TouchableOpacity style={styles.editBtn} onPress={() => router.push('/create-listing')}>
+              <Text style={styles.editBtnText}>{t('edit')}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Listing Card: Pending */}
         <View style={styles.listingCard}>
-          <View style={styles.listingHeader}>
+          <View style={[styles.listingHeader, isRTL && { flexDirection: 'row-reverse' }]}>
             <View style={styles.pendingBadge}>
-              <Text style={styles.pendingBadgeText}>PENDING</Text>
+              <Text style={styles.pendingBadgeText}>{t('pending')}</Text>
             </View>
             <Feather name="more-horizontal" size={20} color={LocalColors.textMuted} />
           </View>
-          <Text style={styles.listingTitle}>Aqaba Coastal Hospitality Bond</Text>
-          <Text style={styles.listingDesc}>
+          <Text style={[styles.listingTitle, isRTL && { textAlign: 'right' }]}>Aqaba Coastal Hospitality Bond</Text>
+          <Text style={[styles.listingDesc, isRTL && { textAlign: 'right' }]}>
             Fixed-income sovereign instrument for the redevelopment of the Aqaba waterfront...
           </Text>
-          <View style={styles.listingFooter}>
-            <Text style={styles.complianceText}>Under compliance review</Text>
-            <TouchableOpacity style={styles.editBtn}>
-              <Text style={styles.editBtnText}>Edit</Text>
+          <View style={[styles.listingFooter, isRTL && { flexDirection: 'row-reverse' }]}>
+            <Text style={styles.complianceText}>{t('underComplianceReview')}</Text>
+            <TouchableOpacity style={styles.editBtn} onPress={() => router.push('/create-listing')}>
+              <Text style={styles.editBtnText}>{t('edit')}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* New Listing Card */}
-        <TouchableOpacity style={styles.newListingCard}>
+        <TouchableOpacity style={styles.newListingCard} onPress={() => router.push('/create-listing')}>
           <View style={styles.newListingIcon}>
             <Feather name="plus" size={16} color={LocalColors.white} />
           </View>
-          <Text style={styles.newListingTitle}>New Listing</Text>
-          <Text style={styles.newListingSub}>Start a new investment entity</Text>
+          <Text style={styles.newListingTitle}>{t('newListingTitle')}</Text>
+          <Text style={styles.newListingSub}>{t('newListingDesc')}</Text>
         </TouchableOpacity>
 
         {/* Document Vault Section */}
         <View style={styles.vaultSection}>
-          <View style={styles.vaultHeader}>
+          <View style={[styles.vaultHeader, isRTL && { flexDirection: 'row-reverse' }]}>
             <View style={styles.vaultIconContainer}>
               <Ionicons name="folder" size={14} color={LocalColors.navy} />
             </View>
-            <Text style={styles.vaultTitle}>Document Vault</Text>
+            <Text style={styles.vaultTitle}>{t('documentVault')}</Text>
           </View>
 
           {/* Doc 1 */}
-          <View style={styles.docCard}>
-            <View style={styles.docIconWrapper}>
+          <View style={[styles.docCard, isRTL && { flexDirection: 'row-reverse' }]}>
+            <View style={[styles.docIconWrapper, isRTL ? { marginLeft: 12, marginRight: 0 } : { marginRight: 12 }]}>
               <Ionicons name="document-text" size={16} color={LocalColors.navy} />
             </View>
-            <View style={styles.docTextWrapper}>
-              <Text style={styles.docName} numberOfLines={1}>Business_Registration_2024.pdf</Text>
-              <Text style={styles.docType}>OFFICIAL INCORPORATION</Text>
+            <View style={[styles.docTextWrapper, isRTL ? { paddingLeft: 10, paddingRight: 0 } : { paddingRight: 10 }]}>
+              <Text style={[styles.docName, isRTL && { textAlign: 'right' }]} numberOfLines={1}>Business_Registration_2024.pdf</Text>
+              <Text style={[styles.docType, isRTL && { textAlign: 'right' }]}>{t('officialIncorporation')}</Text>
             </View>
           </View>
           
           {/* Doc 2 */}
-          <View style={styles.docCard}>
-            <View style={styles.docIconWrapper}>
+          <View style={[styles.docCard, isRTL && { flexDirection: 'row-reverse' }]}>
+            <View style={[styles.docIconWrapper, isRTL ? { marginLeft: 12, marginRight: 0 } : { marginRight: 12 }]}>
               <Ionicons name="document-text" size={16} color={LocalColors.navy} />
             </View>
-            <View style={styles.docTextWrapper}>
-              <Text style={styles.docName} numberOfLines={1}>Compliance_Audit_Q3.pdf</Text>
-              <Text style={styles.docType}>LEGAL CLEARANCE</Text>
+            <View style={[styles.docTextWrapper, isRTL ? { paddingLeft: 10, paddingRight: 0 } : { paddingRight: 10 }]}>
+              <Text style={[styles.docName, isRTL && { textAlign: 'right' }]} numberOfLines={1}>Compliance_Audit_Q3.pdf</Text>
+              <Text style={[styles.docType, isRTL && { textAlign: 'right' }]}>{t('legalClearance')}</Text>
             </View>
             <View style={styles.docBadge}>
-              <Text style={styles.docBadgeText}>UNDER REVIEW</Text>
+              <Text style={styles.docBadgeText}>{t('underReview')}</Text>
             </View>
           </View>
 
           {/* Doc 3 */}
-          <View style={styles.docCard}>
-            <View style={styles.docIconWrapper}>
+          <View style={[styles.docCard, isRTL && { flexDirection: 'row-reverse' }]}>
+            <View style={[styles.docIconWrapper, isRTL ? { marginLeft: 12, marginRight: 0 } : { marginRight: 12 }]}>
               <Ionicons name="document-text" size={16} color={LocalColors.navy} />
             </View>
-            <View style={styles.docTextWrapper}>
-              <Text style={styles.docName} numberOfLines={1}>Tax_Certificate_ID_882.pdf</Text>
-              <Text style={styles.docType}>TAX COMPLIANCE</Text>
+            <View style={[styles.docTextWrapper, isRTL ? { paddingLeft: 10, paddingRight: 0 } : { paddingRight: 10 }]}>
+              <Text style={[styles.docName, isRTL && { textAlign: 'right' }]} numberOfLines={1}>Tax_Certificate_ID_882.pdf</Text>
+              <Text style={[styles.docType, isRTL && { textAlign: 'right' }]}>{t('taxCompliance')}</Text>
             </View>
             <Ionicons name="checkmark-circle" size={18} color={LocalColors.gold} />
           </View>
@@ -585,3 +593,4 @@ const styles = StyleSheet.create({
     color: LocalColors.textMuted,
   },
 });
+
