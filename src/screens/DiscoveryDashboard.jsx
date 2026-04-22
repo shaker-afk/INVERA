@@ -227,15 +227,16 @@ function FeaturedSlider({ listings, isRTL, lang, featuredLabel, investLabel, onP
 // ---------------------------------------------------------------------------
 export default function DiscoveryDashboard() {
   const { t, lang, isRTL, toggleLanguage } = useTranslation();
-  const { filters, hasActiveFilters, resetFilters } = useFilters();
+  const { filters, applyFilters, hasActiveFilters, resetFilters } = useFilters();
 
   const [listings, setListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeSector, setActiveSector] = useState('All');
   const [error, setError] = useState(null);
+
+  const activeSector = filters.sectors.length === 1 ? filters.sectors[0] : (filters.sectors.length === 0 ? 'All' : null);
 
   // ── Data fetching ────────────────────────────────────────────────────────
   const loadListings = useCallback(async () => {
@@ -259,11 +260,6 @@ export default function DiscoveryDashboard() {
   useEffect(() => {
     let result = listings;
 
-    // Quick-chip sector filter (local)
-    if (activeSector !== 'All') {
-      result = result.filter((l) => l.sector === activeSector);
-    }
-
     // FilterContext — sector multi-select
     if (filters.sectors.length > 0) {
       result = result.filter((l) => filters.sectors.includes(l.sector));
@@ -284,16 +280,16 @@ export default function DiscoveryDashboard() {
 
     // Search filter (EN title + AR title)
     if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
+      const q = searchQuery.trim().toLowerCase();
       result = result.filter(
         (l) =>
           l.titleEn.toLowerCase().includes(q) ||
-          l.titleAr.includes(searchQuery)
+          l.titleAr.includes(searchQuery.trim())
       );
     }
 
     setFilteredListings(result);
-  }, [listings, activeSector, searchQuery, filters]);
+  }, [listings, searchQuery, filters]);
 
   // ── Handlers ─────────────────────────────────────────────────────────────
   const handleRefresh = useCallback(() => {
@@ -311,9 +307,12 @@ export default function DiscoveryDashboard() {
 
   // Reset both the quick-chip and the modal filters
   const handleViewAll = useCallback(() => {
-    setActiveSector('All');
     resetFilters();
   }, [resetFilters]);
+
+  const handleSectorSelect = useCallback((key) => {
+    applyFilters({ ...filters, sectors: key === 'All' ? [] : [key] });
+  }, [filters, applyFilters]);
 
   // Top 3 by trending always shown in the featured slider (unaffected by chips)
   const featuredListings = useMemo(
@@ -356,7 +355,7 @@ export default function DiscoveryDashboard() {
       <View style={styles.section}>
         <SectorChips
           activeSector={activeSector}
-          onSelect={setActiveSector}
+          onSelect={handleSectorSelect}
           isRTL={isRTL}
           lang={lang}
         />
@@ -370,7 +369,7 @@ export default function DiscoveryDashboard() {
         onAction={handleViewAll}
       />
     </>
-  ), [featuredListings, activeSector, isRTL, lang, t, handleCardPress, handleViewAll]);
+  ), [featuredListings, activeSector, isRTL, lang, t, handleCardPress, handleViewAll, handleSectorSelect]);
 
   // ── Empty / error state (memoized) ───────────────────────────────────────
   const ListEmpty = useMemo(() => (

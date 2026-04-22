@@ -15,7 +15,7 @@
  *  - Active filter count badge on apply button
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -271,6 +271,21 @@ export default function FiltersScreen() {
   );
   const [draftEco, setDraftEco] = useState(filters.ecoOnly);
 
+  // Sync draft state if global filters change (e.g. from Dashboard or on reopen)
+  useEffect(() => {
+    setDraftSectors(filters.sectors);
+    setDraftCapital(
+      filters.capitalBucket
+        ? CAPITAL_BUCKETS.find(
+            (b) =>
+              b.value?.min === filters.capitalBucket.min &&
+              b.value?.max === filters.capitalBucket.max
+          ) ?? CAPITAL_BUCKETS[0]
+        : CAPITAL_BUCKETS[0]
+    );
+    setDraftEco(filters.ecoOnly);
+  }, [filters]);
+
   // ── Sector toggle ────────────────────────────────────────────────────────
   const toggleSector = useCallback((sector) => {
     setDraftSectors((prev) =>
@@ -312,11 +327,12 @@ export default function FiltersScreen() {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      {/* Drag Handle */}
-      <View style={styles.dragHandle} />
+      <SafeAreaView style={styles.headerWrapper} edges={['top']}>
+        {/* Drag Handle */}
+        <View style={styles.dragHandle} />
 
-      {/* Header */}
-      <View style={[styles.header, isRTL && styles.rowRTL]}>
+        {/* Header */}
+        <View style={[styles.header, isRTL && styles.rowRTL]}>
         <View>
           <Text style={styles.headerTitle}>{t('filterTitle')}</Text>
           {activeCount > 0 && (
@@ -341,10 +357,11 @@ export default function FiltersScreen() {
             accessibilityRole="button"
             accessibilityLabel="Close"
           >
-            <Ionicons name="close" size={20} color={Colors.onSurface} />
+            <Ionicons name="close" size={20} color={Colors.onPrimary} />
           </TouchableOpacity>
         </View>
       </View>
+      </SafeAreaView>
 
       <ScrollView
         style={styles.scroll}
@@ -463,20 +480,22 @@ const styles = StyleSheet.create({
     width: 36,
     height: 4,
     borderRadius: 2,
-    backgroundColor: Colors.outlineVariant,
+    backgroundColor: 'rgba(255,255,255,0.4)',
     alignSelf: 'center',
     marginTop: Spacing.sm,
     marginBottom: Spacing.xs,
   },
 
   // Header
+  headerWrapper: {
+    backgroundColor: Colors.primaryContainer,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
-    backgroundColor: Colors.primaryContainer,
   },
   rowRTL: { flexDirection: 'row-reverse' },
   headerTitle: {
