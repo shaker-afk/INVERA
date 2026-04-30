@@ -53,11 +53,6 @@ export default function TabLayout() {
         options={{ title: 'Hub' }}
       />
 
-      {/* Hide the legacy explore tab — keep file to avoid bundle errors */}
-      <Tabs.Screen
-        name="explore"
-        options={{ href: null }}
-      />
     </Tabs>
     <AIRegulatoryAssistant />
     </>
